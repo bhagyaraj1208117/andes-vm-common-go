@@ -21,7 +21,7 @@ type VMInput struct {
 	// AsyncArguments are used only internally by the promises framework
 	AsyncArguments *AsyncArguments
 
-	// CallValue is the Moax value (amount of tokens) transferred by the transaction.
+	// CallValue is the eGLD value (amount of tokens) transferred by the transaction.
 	// Before reaching the VM this value is subtracted from sender balance (CallerAddr)
 	// and to added to the smart contract balance.
 	// It is often, but not always zero in SC calls.
