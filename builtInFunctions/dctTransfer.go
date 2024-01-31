@@ -147,7 +147,7 @@ func (e *dctTransfer) ProcessBuiltinFunction(
 		}
 
 		if isSCCallAfter {
-			vmOutput.GasRemaining, err = vmcommon.SafeSubUint64(vmInput.GasProvided, e.funcGasCost)
+			vmOutput.GasRemaining, _ = vmcommon.SafeSubUint64(vmInput.GasProvided, e.funcGasCost)
 			var callArgs [][]byte
 			if len(vmInput.Arguments) > core.MinLenArgumentsDCTTransfer+1 {
 				callArgs = vmInput.Arguments[core.MinLenArgumentsDCTTransfer+1:]
@@ -163,7 +163,16 @@ func (e *dctTransfer) ProcessBuiltinFunction(
 				vmInput.CallType,
 				vmOutput)
 
-			addDCTEntryInVMOutput(vmOutput, []byte(core.BuiltInFunctionDCTTransfer), tokenID, 0, value, vmInput.CallerAddr, acntDst.AddressBytes())
+			addDCTEntryForTransferInVMOutput(
+				vmInput, vmOutput,
+				[]byte(core.BuiltInFunctionDCTTransfer),
+				acntDst.AddressBytes(),
+				[]*TopicTokenData{{
+					tokenID,
+					0,
+					value,
+				}},
+			)
 			return vmOutput, nil
 		}
 
@@ -172,7 +181,15 @@ func (e *dctTransfer) ProcessBuiltinFunction(
 			vmOutput.GasRemaining = vmInput.GasProvided
 		}
 
-		addDCTEntryInVMOutput(vmOutput, []byte(core.BuiltInFunctionDCTTransfer), tokenID, 0, value, vmInput.CallerAddr, acntDst.AddressBytes())
+		addDCTEntryForTransferInVMOutput(
+			vmInput, vmOutput,
+			[]byte(core.BuiltInFunctionDCTTransfer),
+			acntDst.AddressBytes(),
+			[]*TopicTokenData{{
+				tokenID,
+				0,
+				value,
+			}})
 		return vmOutput, nil
 	}
 
@@ -189,7 +206,15 @@ func (e *dctTransfer) ProcessBuiltinFunction(
 			vmOutput)
 	}
 
-	addDCTEntryInVMOutput(vmOutput, []byte(core.BuiltInFunctionDCTTransfer), tokenID, 0, value, vmInput.CallerAddr, vmInput.RecipientAddr)
+	addDCTEntryForTransferInVMOutput(
+		vmInput, vmOutput,
+		[]byte(core.BuiltInFunctionDCTTransfer),
+		vmInput.RecipientAddr,
+		[]*TopicTokenData{{
+			tokenID,
+			0,
+			value,
+		}})
 	return vmOutput, nil
 }
 

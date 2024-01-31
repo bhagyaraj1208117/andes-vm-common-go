@@ -5,11 +5,9 @@ import (
 	"testing"
 
 	"github.com/bhagyaraj1208117/andes-core-go/core/pubkeyConverter"
-	logger "github.com/bhagyaraj1208117/andes-logger-go"
 	"github.com/stretchr/testify/require"
 )
 
-var log = logger.GetOrCreate("parse-tests")
 var addressPrefix = "moa"
 
 var pubKeyConv, _ = pubkeyConverter.NewBech32PubkeyConverter(32, addressPrefix)
